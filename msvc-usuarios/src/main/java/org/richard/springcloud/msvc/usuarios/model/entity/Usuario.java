@@ -1,6 +1,8 @@
 package org.richard.springcloud.msvc.usuarios.model.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "usuarios")
@@ -10,11 +12,14 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotEmpty(message = "nombre no puede ser vacio")
     private String nombre;
 
+    @Email
     @Column(unique = true)
     private String email;
 
+    @NotEmpty(message = "password no deve estar vacio")
     private String password;
 
 

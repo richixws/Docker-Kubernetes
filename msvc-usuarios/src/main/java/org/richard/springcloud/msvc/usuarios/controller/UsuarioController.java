@@ -5,9 +5,13 @@ import org.richard.springcloud.msvc.usuarios.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -32,7 +36,15 @@ public class UsuarioController {
     }
 
     @PostMapping("/usuario")
-    public ResponseEntity<Usuario> saveUsuario(@RequestBody Usuario usuario){
+    public ResponseEntity<Usuario> saveUsuario(@Valid @RequestBody Usuario usuario, BindingResult  bindingResult ){
+
+        if(bindingResult.hasErrors()){
+            Map<String,String> errores=new HashMap<>();
+            bindingResult.getFieldErrors().forEach(err -> {
+                errores.put(err.getField(),"ElCampo "+err.getField()+ "" +err.getDefaultMessage());
+            });
+            return new ResponseEntity<Usuario>(HttpStatus.BAD_REQUEST);
+        }
 
         Usuario usuariosave=usuarioService.saveUsuario(usuario);
         return new ResponseEntity<>(usuariosave,HttpStatus.CREATED);
