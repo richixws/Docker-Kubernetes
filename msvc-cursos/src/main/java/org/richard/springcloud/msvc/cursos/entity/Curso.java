@@ -1,6 +1,7 @@
 package org.richard.springcloud.msvc.cursos.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 
 @Table
 @Entity(name = "cursos")
@@ -10,6 +11,7 @@ public class Curso {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotEmpty
     private String nombre;
 
 

@@ -9,10 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
@@ -36,14 +33,14 @@ public class UsuarioController {
     }
 
     @PostMapping("/usuario")
-    public ResponseEntity<Usuario> saveUsuario(@Valid @RequestBody Usuario usuario, BindingResult  bindingResult ){
+    public ResponseEntity<?> saveUsuario(@Valid @RequestBody Usuario usuario, BindingResult  result ){
 
-        if(bindingResult.hasErrors()){
-            Map<String,String> errores=new HashMap<>();
-            bindingResult.getFieldErrors().forEach(err -> {
-                errores.put(err.getField(),"ElCampo "+err.getField()+ "" +err.getDefaultMessage());
-            });
-            return new ResponseEntity<Usuario>(HttpStatus.BAD_REQUEST);
+         if (usuarioService.BuscarPorEmail(usuario.getEmail()).isPresent()){
+             return ResponseEntity.badRequest().body(Collections.singletonMap("mensaje","ya existe un usuario con ese correo electronico !"));
+         }
+
+        if(result.hasErrors()){
+            return validar(result);
         }
 
         Usuario usuariosave=usuarioService.saveUsuario(usuario);
@@ -51,7 +48,11 @@ public class UsuarioController {
     }
 
     @PutMapping("/usuario/{id}")
-    public ResponseEntity<Usuario> updateUsuario(@RequestBody Usuario usuario,@PathVariable Long id){
+    public ResponseEntity<?> updateUsuario(@Valid @RequestBody Usuario usuario,BindingResult result, @PathVariable Long id){
+
+        if(result.hasErrors()){
+            return validar(result);
+        }
 
         Usuario usuarioupdate=usuarioService.updateUsuario(usuario,id);
         return new ResponseEntity<>(usuarioupdate, HttpStatus.OK);
@@ -66,6 +67,15 @@ public class UsuarioController {
         }
         usuarioService.deleteUsuario(id);
         return ResponseEntity.notFound()    .build();
+    }
+
+
+    private static ResponseEntity<Map<String, String>> validar(BindingResult bindingResult) {
+        Map<String,String> errores=new HashMap<>();
+        bindingResult.getFieldErrors().forEach(err -> {
+            errores.put(err.getField(),"ElCampo "+err.getField()+ "" +err.getDefaultMessage());
+        });
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errores);
     }
 
 }
