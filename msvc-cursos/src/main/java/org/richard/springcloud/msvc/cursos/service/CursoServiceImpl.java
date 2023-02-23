@@ -1,6 +1,8 @@
 package org.richard.springcloud.msvc.cursos.service;
 
-import org.richard.springcloud.msvc.cursos.entity.Curso;
+import org.richard.springcloud.msvc.cursos.clients.UsuarioClientRest;
+import org.richard.springcloud.msvc.cursos.models.Usuario;
+import org.richard.springcloud.msvc.cursos.models.entity.Curso;
 import org.richard.springcloud.msvc.cursos.repository.CursoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,9 @@ public class CursoServiceImpl implements CursoService {
 
     @Autowired
     private CursoRepository cursoRepository;
+
+    @Autowired
+    private UsuarioClientRest clientRest;
 
 
     @Override
@@ -38,5 +43,23 @@ public class CursoServiceImpl implements CursoService {
     @Transactional
     public void eliminar(Long id) {
         cursoRepository.deleteById(id);
+    }
+
+
+
+    @Override
+    public Optional<Usuario> asignarUsuario(Usuario usuario, Long cursoId) {
+
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Usuario> crearUsuario(Usuario usuario, Long cursoId) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Usuario> eliminarUsuario(Usuario usuario, Long cursoId) {
+        return Optional.empty();
     }
 }

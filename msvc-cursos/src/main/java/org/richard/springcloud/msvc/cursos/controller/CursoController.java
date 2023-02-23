@@ -1,6 +1,6 @@
 package org.richard.springcloud.msvc.cursos.controller;
 
-import org.richard.springcloud.msvc.cursos.entity.Curso;
+import org.richard.springcloud.msvc.cursos.models.entity.Curso;
 import org.richard.springcloud.msvc.cursos.service.CursoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
