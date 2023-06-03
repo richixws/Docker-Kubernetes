@@ -66,7 +66,13 @@ public class UsuarioController {
             return  ResponseEntity.notFound().build();
         }
         usuarioService.deleteUsuario(id);
-        return ResponseEntity.notFound()    .build();
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/usuarios-por-curso")
+    public ResponseEntity<?> obtenerAlumnosPorCurso(@RequestParam  List<Long> ids ){
+
+        return ResponseEntity.ok(usuarioService.listarPorIds(ids));
     }
 
 

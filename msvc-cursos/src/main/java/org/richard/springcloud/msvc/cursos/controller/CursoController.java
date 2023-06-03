@@ -29,7 +29,7 @@ public class CursoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Curso> detalle(@PathVariable Long id){
-        Optional<Curso> o=cursoService.budcarPorId(id);
+        Optional<Curso> o=cursoService.porIdConUsuarios(id); //cursoService.budcarPorId(id);
         if(o.isPresent()){
            return ResponseEntity.ok(o.get());
         }
@@ -79,7 +79,7 @@ public class CursoController {
            o = cursoService.asignarUsuario(usuario,cursoId);
          }catch (FeignException e){
            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                                .body(Collections.singletonMap("mensaje","no eciste el usuario por "+
+                                .body(Collections.singletonMap("mensaje","no exciste el usuario por "+
                                         "el id o error de comunicacion:"+e.getMessage()));
          }
           if(o.isPresent()){
