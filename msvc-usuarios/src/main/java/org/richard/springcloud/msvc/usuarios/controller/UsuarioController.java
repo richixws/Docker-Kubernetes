@@ -5,10 +5,11 @@ import org.richard.springcloud.msvc.usuarios.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
+import javax.validation.Valid;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
@@ -32,14 +33,26 @@ public class UsuarioController {
     }
 
     @PostMapping("/usuario")
-    public ResponseEntity<Usuario> saveUsuario(@RequestBody Usuario usuario){
+    public ResponseEntity<?> saveUsuario(@Valid @RequestBody Usuario usuario, BindingResult  result ){
+
+         if (usuarioService.BuscarPorEmail(usuario.getEmail()).isPresent()){
+             return ResponseEntity.badRequest().body(Collections.singletonMap("mensaje","ya existe un usuario con ese correo electronico !"));
+         }
+
+        if(result.hasErrors()){
+            return validar(result);
+        }
 
         Usuario usuariosave=usuarioService.saveUsuario(usuario);
         return new ResponseEntity<>(usuariosave,HttpStatus.CREATED);
     }
 
     @PutMapping("/usuario/{id}")
-    public ResponseEntity<Usuario> updateUsuario(@RequestBody Usuario usuario,@PathVariable Long id){
+    public ResponseEntity<?> updateUsuario(@Valid @RequestBody Usuario usuario,BindingResult result, @PathVariable Long id){
+
+        if(result.hasErrors()){
+            return validar(result);
+        }
 
         Usuario usuarioupdate=usuarioService.updateUsuario(usuario,id);
         return new ResponseEntity<>(usuarioupdate, HttpStatus.OK);
@@ -53,7 +66,22 @@ public class UsuarioController {
             return  ResponseEntity.notFound().build();
         }
         usuarioService.deleteUsuario(id);
-        return ResponseEntity.notFound()    .build();
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/usuarios-por-curso")
+    public ResponseEntity<?> obtenerAlumnosPorCurso(@RequestParam  List<Long> ids ){
+
+        return ResponseEntity.ok(usuarioService.listarPorIds(ids));
+    }
+
+
+    private static ResponseEntity<Map<String, String>> validar(BindingResult bindingResult) {
+        Map<String,String> errores=new HashMap<>();
+        bindingResult.getFieldErrors().forEach(err -> {
+            errores.put(err.getField(),"ElCampo "+err.getField()+ "" +err.getDefaultMessage());
+        });
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errores);
     }
 
 }

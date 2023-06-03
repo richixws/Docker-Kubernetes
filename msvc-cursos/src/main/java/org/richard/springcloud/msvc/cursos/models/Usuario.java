@@ -1,31 +1,20 @@
-package org.richard.springcloud.msvc.usuarios.model.entity;
-import javax.persistence.*;
+package org.richard.springcloud.msvc.cursos.models;
+
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
-@Entity
-@Table(name = "usuarios")
+
 public class Usuario {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank
-    @NotEmpty(message = "nombre no puede ser vacio")
     private String nombre;
-
-    @NotEmpty
-    @Email
-    @Column(unique = true)
     private String email;
-
-    @NotBlank
-    @NotEmpty(message = "password no deve estar vacio")
     private String password;
-
-
 
     public Long getId() {
         return id;

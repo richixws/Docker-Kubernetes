@@ -13,4 +13,9 @@ public interface UsuarioService {
     public Usuario updateUsuario(Usuario usuario, Long id);
     public void deleteUsuario(Long id);
 
+    public List<Usuario> listarPorIds(Iterable<Long> ids);
+
+    public Optional<Usuario> BuscarPorEmail(String email);
+    //Optional<Usuario> buscarPorEmail(String email);
+
 }
