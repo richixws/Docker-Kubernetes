@@ -14,6 +14,7 @@ public interface CursoService {
     void eliminar(Long id);
 
     Optional<Curso> porIdConUsuarios(Long id);
+    void eliminarCursoUsuarioPorid(Long id);
 
     //loguica de negocio de datos de otro servicio
 

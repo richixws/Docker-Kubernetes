@@ -36,7 +36,7 @@ public class UsuarioController {
     public ResponseEntity<?> saveUsuario(@Valid @RequestBody Usuario usuario, BindingResult  result ){
 
          if (usuarioService.BuscarPorEmail(usuario.getEmail()).isPresent()){
-             return ResponseEntity.badRequest().body(Collections.singletonMap("mensaje","ya existe un usuario con ese correo electronico !"));
+             return ResponseEntity.badRequest().body(Collections.singletonMap("mensaje","ya existe un usuario con ese email electronico !"));
          }
 
         if(result.hasErrors()){
